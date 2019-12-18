@@ -1,18 +1,30 @@
 <template lang="pug">
-  h1 home
+  v-data-table.elevation-1(
+    :headers="headers"
+    :items="items"
+    :items-per-page="5"
+    multi-sort
+  )
 </template>
 
 <script>
 import Layout from '@/Layouts/Main'
 
 export default {
-  layout(h, page) {
-    return h(Layout, {
-      props: {
-        title: 'Home',
-        index: 0
-      }
-    }, [page])
+  layout: Layout,
+  metaInfo: {
+    title: 'Home'
   },
+  data() {
+    return {
+      headers: [
+        { text: 'Header1', value: 'Header1' },
+        { text: 'Header2', value: 'Header2' },
+        { text: 'Header3', value: 'Header3' },
+        { text: 'Header4', value: 'Header4' },
+      ],
+      items: []
+    }
+  }
 }
 </script>

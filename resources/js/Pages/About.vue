@@ -6,13 +6,9 @@
 import Layout from '@/Layouts/Main'
 
 export default {
-  layout(h, page) {
-    return h(Layout, {
-      props: {
-        title: 'About',
-        index: 1
-      }
-    }, [page])
-  },
+  layout: Layout,
+  metaInfo: {
+    title: 'About'
+  }
 }
 </script>
