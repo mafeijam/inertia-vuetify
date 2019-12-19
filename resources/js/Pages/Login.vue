@@ -14,9 +14,9 @@
             v-card-text.px-6.pt-0
               v-row
                 v-col
-                  v-btn(block color="indigo" dark large) 登入
+                  v-btn(block color="indigo" dark large elevation="1") 登入
                 v-col
-                  v-btn(block color="pink" dark large) 忘記密碼
+                  v-btn(block color="pink" dark large elevation="1") 忘記密碼
 </template>
 
 <script>
