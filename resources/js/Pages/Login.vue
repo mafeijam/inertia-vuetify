@@ -8,26 +8,38 @@
               v-toolbar-title 超勁系統
             v-card-text.pa-6
               v-form
-                v-text-field(label="帳號" prepend-inner-icon="mdi-email" filled)
-                v-text-field(label="密碼" prepend-inner-icon="mdi-lock" filled type="password")
-                v-checkbox.mt-0(v-model="checkbox" label="記住電郵" hide-details color="indigo")
-            v-card-text.px-6.pt-0
-              v-row
-                v-col
-                  v-btn(block color="indigo" dark large elevation="1") 登入
-                v-col
-                  v-btn(block color="pink" dark large elevation="1") 忘記密碼
+                v-text-field(v-model="form.email" label="帳號" prepend-inner-icon="mdi-email" filled autofocus)
+                v-text-field(v-model="form.password" label="密碼" prepend-inner-icon="mdi-lock" filled type="password")
+                v-checkbox.mt-0.mb-6(v-model="form.remember" label="記住我" hide-details color="indigo")
+                v-row(no-gutters)
+                  v-col.mr-3
+                    v-btn(block color="pink" dark large elevation="1") 忘記密碼
+                  v-col
+                    v-btn(block color="indigo" dark large elevation="1" @click="login") 登入
 </template>
 
 <script>
 export default {
   data() {
     return {
-      checkbox: false
+      checkbox: false,
+      form: {
+        email: '',
+        password: '',
+        remember: false
+      }
     }
   },
   metaInfo: {
     title: 'Login'
+  },
+  methods: {
+    login() {
+      if (this.form.remember === false) {
+        delete this.form.remember
+      }
+      this.$inertia.post('/login', this.form)
+    }
   }
 }
 </script>

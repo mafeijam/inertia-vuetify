@@ -8,13 +8,13 @@ Mix.listen('configReady', config => {
   const scssOptions = scssRule.loaders.find(l => l.loader === 'sass-loader').options
   scssOptions.implementation = require('sass')
   scssOptions.fiber = require('fibers')
-  scssOptions.data = '@import "./resources/scss/variables.scss";'
+  // scssOptions.data = '@import "./resources/scss/variables.scss";'
 
   const sassRule = config.module.rules.find(r => r.test.toString() === /\.sass$/.toString())
   const sassOptions = sassRule.loaders.find(l => l.loader === 'sass-loader').options
   sassOptions.implementation = require('sass')
   sassOptions.fiber = require('fibers')
-  sassOptions.data = '@import "./resources/scss/variables.scss"'
+  // sassOptions.data = '@import "./resources/scss/variables.scss"'
 })
 
 mix.js('resources/js/app.js', 'public/js')
@@ -35,20 +35,15 @@ mix.js('resources/js/app.js', 'public/js')
       },
     },
     module: {
-      rules: [
-        {
-          test: /\.pug$/,
-          oneOf: [
-            {
-              resourceQuery: /^\?vue/,
-              use: ['pug-plain-loader']
-            },
-            {
-              use: ['raw-loader', 'pug-plain-loader']
-            }
-          ]
-        }
-      ]
+      rules: [{
+        test: /\.pug$/,
+        oneOf: [{
+          resourceQuery: /^\?vue/,
+          use: ['pug-plain-loader']
+        }, {
+          use: ['raw-loader', 'pug-plain-loader']
+        }]
+      }]
     }
   })
   .babelConfig({

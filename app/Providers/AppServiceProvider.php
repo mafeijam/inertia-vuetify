@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Auth;
 use Session;
+use Request;
 use Inertia\Inertia;
 use Illuminate\Support\ServiceProvider;
 
@@ -37,6 +38,7 @@ class AppServiceProvider extends ServiceProvider
                     ? Session::get('errors')->getBag('default')->getMessages()
                     : (object) [];
             },
+            'url' => Request::path()
         ]);
     }
 

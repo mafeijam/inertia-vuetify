@@ -1,38 +1,53 @@
 <template lang="pug">
   v-row(dense)
-    v-dialog(v-model="confirm" max-width="290")
-      v-card
-        v-card-title 確認刪除
-        v-card-text {{ selected.name }}
-        v-card-actions
-          v-spacer
-          v-btn(@click="confirm = false" text color="pink") 取消
-          v-btn(@click="confirmDelete" text color="indigo" :loading="loading") 確認
-
-
-    v-col.mb-2(cols="6")
-      v-text-field(v-model="search" prepend-inner-icon="mdi-magnify" single-line hide-details dense clearable)
-    v-col.mb-2.text-end(cols="6")
-      v-btn(color="indigo" elevation="1" dark @click="$inertia.visit('/admin/user/create')")
-        <v-icon left>mdi-account-plus</v-icon> 新增用戶
+    confirm-dialog(:show.sync="confirm" :options="conformOptions")
 
     v-col(cols="12")
-      v-data-table.elevation-1(
-        :headers="headers"
-        :items="users"
-        :items-per-page="15"
-        multi-sort
-        :search="search"
-      )
-        template(v-slot:item.action="{ item }")
-          v-btn.mr-2(@click="editItem(item)" color="green" icon small)
-            v-icon mdi-account-edit
-          v-btn(@click="deleteItem(item)" color="pink" icon small)
-            v-icon mdi-account-remove
+      v-card
+        v-row.px-3
+          v-col(cols="6")
+            v-text-field(v-model="search" prepend-inner-icon="mdi-magnify" single-line hide-details dense clearable)
+          v-col.text-end(cols="6")
+            v-btn(color="indigo" elevation="1" dark @click="$inertia.visit('/admin/user/create')")
+              <v-icon left>mdi-account-plus</v-icon> 新增用戶
+        v-data-table(
+          :headers="headers"
+          :items="users"
+          :items-per-page="15"
+          multi-sort
+          :search="search"
+        )
+          template(v-slot:item.action="{ item }")
+            v-tooltip(bottom color="green")
+              template(v-slot:activator="{ on }")
+                v-btn.mr-1(@click="editItem(item)" color="green" icon small v-on="on")
+                  v-icon mdi-account-edit
+              span 修改用戶
+            v-tooltip(bottom color="orange" v-if="item.banned_at == null")
+              template(v-slot:activator="{ on }")
+                v-btn.mr-1(@click="banItem(item)" color="orange" icon small v-on="on")
+                  v-icon mdi-cancel
+              span 停用用戶
+            v-tooltip(bottom color="purple" v-else)
+              template(v-slot:activator="{ on }")
+                v-btn.mr-1(@click="unbanItem(item)" color="purple" icon small v-on="on")
+                  v-icon mdi-account-check
+              span 啟用用戶
+            v-tooltip(bottom color="teal")
+              template(v-slot:activator="{ on }")
+                v-btn.mr-1(@click="resetItem(item)" color="teal" icon small v-on="on")
+                  v-icon mdi-lock-reset
+              span 重設用戶密碼
+            v-tooltip(bottom color="pink")
+              template(v-slot:activator="{ on }")
+                v-btn(@click="deleteItem(item)" color="pink" icon small v-on="on")
+                  v-icon mdi-account-remove
+              span 刪除用戶
 </template>
 
 <script>
-import Layout from '@/Layouts/Main'
+import Layout from '@/Components/LayoutMain'
+import conformOptions from '@/stub/confirm-options'
 
 export default {
   layout: Layout,
@@ -42,35 +57,58 @@ export default {
   props: ['users'],
   data() {
     return {
-      loading: false,
       confirm: false,
       headers: [
         { text: '名稱', value: 'name' },
         { text: '電郵', value: 'email' },
-        { text: '新增日期', value: 'created_at' },
-        { text: '最後更新', value: 'updated_at' },
+        { text: '新增日期', value: 'created_at', filterable: false },
+        { text: '最後更新', value: 'updated_at', filterable: false },
         { text: '操作', value: 'action', sortable: false, align: 'right' },
       ],
       items: [],
       search: '',
-      selected: {
-        name: null
-      }
+      conformOptions: { ...conformOptions }
     }
   },
   methods: {
     editItem(item) {
       this.$inertia.visit(`/admin/user/${item.id}/edit`)
     },
-    deleteItem(item) {
-      this.selected = item
+    resetItem(item) {
       this.confirm = true
-      this.$root.flashSnackbar = false
+      this.conformOptions = {
+        title: '確認重設用戶密碼',
+        message: item.name,
+        method: 'patch',
+        endpoint: `/admin/user/${item.id}/reset?name=1`
+      }
     },
-    confirmDelete() {
-      this.loading = true
-      this.$inertia.delete(`/admin/user/${this.selected.id}`)
-        .finally(() => this.loading = false)
+    deleteItem(item) {
+      this.confirm = true
+      this.conformOptions = {
+        title: '確認刪除',
+        message: item.name,
+        method: 'delete',
+        endpoint: `/admin/user/${item.id}`
+      }
+    },
+    banItem(item) {
+      this.confirm = true
+      this.conformOptions = {
+        title: '確認停用',
+        message: item.name,
+        method: 'patch',
+        endpoint: `/admin/user/${item.id}/ban?name=1`
+      }
+    },
+    unbanItem(item) {
+      this.confirm = true
+      this.conformOptions = {
+        title: '確認啟用',
+        message: item.name,
+        method: 'patch',
+        endpoint: `/admin/user/${item.id}/ban?name=1&unban=1`
+      }
     }
   }
 }

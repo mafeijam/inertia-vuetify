@@ -1,1 +1,23 @@
 @import "nprogress";
+
+* {
+    font-family: 'Noto Sans TC';
+}
+
+.ghost {
+    opacity: .5;
+}
+
+.handle {
+    cursor: all-scroll;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.top {
+    top: 0;
+    position: absolute;
+    z-index: 9999;
+}

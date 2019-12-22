@@ -7,25 +7,26 @@
         v-form
           v-text-field(label="名稱" v-model="form.name" color="orange"
             prepend-inner-icon="mdi-account" filled
-            :error-messages="$page.errors.name")
+            :error-messages="$page.errors.name"
+            @keydown="$page.errors.name = []"
+            autofocus)
           v-text-field(label="電郵" v-model="form.email" color="orange"
             prepend-inner-icon="mdi-email" filled
-            :error-messages="$page.errors.email")
+            :error-messages="$page.errors.email"
+            @keydown="$page.errors.email = []")
           v-text-field(label="密碼" v-model="form.password" color="orange"
             prepend-inner-icon="mdi-lock" filled type="password"
-            :error-messages="$page.errors.password")
-      v-card-text.px-6.pt-0
-        v-row
-          v-col
-            v-btn(block color="indigo" dark large elevation="1" @click="submit" :loading="loading")
-              <v-icon left>mdi-check</v-icon> 新增
+            :error-messages="$page.errors.password"
+            @keydown="$page.errors.password = []")
+          v-btn(block color="indigo" dark large elevation="1" @click="submit" :loading="loading")
+            <v-icon left>mdi-check</v-icon> 新增
 </template>
 
 <script>
-import Layout from '@/Layouts/Main'
+import layout from '@/Components/LayoutMain'
 
 export default {
-  layout: Layout,
+  layout,
   metaInfo: {
     title: 'User Create'
   },
@@ -38,9 +39,6 @@ export default {
         password: null
       }
     }
-  },
-  mounted() {
-    this.$root.flashSnackbar = false
   },
   methods: {
     submit() {
