@@ -31,8 +31,8 @@ export default {
     confirm() {
       this.loading = true
       this.$inertia[this.options.method](this.options.endpoint, {
-            preserveState: true,
-            preserveScroll: true,
+          preserveState: true,
+          preserveScroll: true,
         })
         .finally(() => {
           this.loading = false

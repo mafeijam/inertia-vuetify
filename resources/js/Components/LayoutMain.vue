@@ -45,6 +45,7 @@
 
     v-snackbar(
       v-model="show"
+      :timeout="timeout"
       top color="success"
       @input="clearSuccess"
     ) {{ $page.flash.success }}
@@ -57,6 +58,7 @@ export default {
   data() {
     return {
       drawer: true,
+      timeout: 6000,
       items: [
         { icon: 'mdi-account-group', link: '/admin/users', text: '用戶管理', val: 'admin' },
         { icon: 'mdi-lock', link: '/protect', text: 'Protect', val: 'protect' }
@@ -76,6 +78,7 @@ export default {
     '$page.flash.success': {
       handler(val) {
         this.show = val !== null
+        this.timeout = 6000
       },
       immediate: true
     },

@@ -4,7 +4,7 @@
 
     v-col(cols="12")
       v-card
-        v-row.px-3
+        v-row.pa-5(no-gutters)
           v-col(cols="6")
             v-text-field(v-model="search" prepend-inner-icon="mdi-magnify" single-line hide-details dense clearable)
           v-col.text-end(cols="6")
