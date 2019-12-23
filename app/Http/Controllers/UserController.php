@@ -31,6 +31,8 @@ class UserController extends Controller
             'password' => 'required'
         ], $this->message());
 
+        $valid['password'] = bcrypt($valid['password']);
+
         User::create($valid);
 
         return redirect('/admin/users')->with('success', '已成功新增用戶');
@@ -84,7 +86,7 @@ class UserController extends Controller
     public function reset(User $user, Request $request)
     {
         $password = Str::random(10);
-        $user->password = $password;
+        $user->password = bcrypt($password);
         $user->save();
 
         Mail::to($user)->send(new ResetUserPassword($password));
@@ -108,6 +110,8 @@ class UserController extends Controller
         $valid = $request->validate([
             'password' => 'required|confirmed'
         ], $this->message());
+
+        $valid['password'] = bcrypt($valid['password']);
 
         $request->user()->update($valid);
 

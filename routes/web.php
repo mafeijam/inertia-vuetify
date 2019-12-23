@@ -8,7 +8,7 @@ Route::get('/', function () {
     return Inertia::render('Home');
 });
 
-Route::prefix('admin')->middleware('auth')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'banned'])->group(function () {
     Route::get('users', [UserController::class, 'index']);
     Route::get('user/create', [UserController::class, 'create']);
     Route::get('user/{user}/edit', [UserController::class, 'edit']);
@@ -19,7 +19,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::patch('user/{user}/reset', [UserController::class, 'reset']);
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'banned'])->group(function () {
     Route::post('logout', [LoginController::class, 'logout']);
     Route::get('change-password', [UserController::class, 'showChangePassword']);
     Route::post('change-password', [UserController::class, 'changePassword']);
@@ -27,9 +27,13 @@ Route::middleware('auth')->group(function () {
 
 Route::get('banned', [UserController::class, 'banned']);
 
-Route::get('login', [LoginController::class, 'showLoginForm'])->middleware('guest');
-Route::post('login', [LoginController::class, 'login']);
+Route::get('login', [LoginController::class, 'showLoginForm'])->name('login')->middleware('guest');
+Route::post('login', [LoginController::class, 'login'])->middleware('guest');
 
 Route::get('protect', function () {
     return Inertia::render('Protect');
+})->middleware('auth');
+
+Route::get('auth/ping', function () {
+    return 'ping';
 })->middleware('auth');

@@ -1,13 +1,19 @@
 <template lang="pug">
-  div
-    v-btn(@click="add") add
-    draggable(v-model="headers" v-bind="dragOptions")
-      v-card.my-2.drag-list(v-for="h in headers" :key="h.value" tile elevation="1")
-        v-card-text
-          v-row(no-gutters)
-            v-col.handle.mr-3(cols="auto")
-              v-icon mdi-menu
-            v-col {{ h.text }}
+  v-app
+    v-content
+      v-container.fill-height(fluid)
+        flash-message
+        v-row(align="center" justify="center")
+          .display-3 Home
+  //- div
+  //-   v-btn(@click="add") add
+  //-   draggable(v-model="headers" v-bind="dragOptions")
+  //-     v-card.my-2.drag-list(v-for="h in headers" :key="h.value" tile elevation="1")
+  //-       v-card-text
+  //-         v-row(no-gutters)
+  //-           v-col.handle.mr-3(cols="auto")
+  //-             v-icon mdi-menu
+  //-           v-col {{ h.text }}
     //- v-text-field(v-model="obj.key1" label="key1")
     //- v-btn(@click="reset") reset
 </template>
@@ -22,7 +28,7 @@ const obj = {
 }
 
 export default {
-  layout,
+  // layout,
   metaInfo: {
     title: 'Home'
   },

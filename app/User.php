@@ -37,8 +37,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function setPasswordAttribute($value)
+    public function loginActivities()
     {
-        $this->attributes['password'] = bcrypt($value);
+        return $this->hasMany(LoginActivity::class);
     }
 }

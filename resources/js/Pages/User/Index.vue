@@ -6,7 +6,7 @@
       v-card
         v-row.pa-5(no-gutters)
           v-col(cols="6")
-            v-text-field(v-model="search" prepend-inner-icon="mdi-magnify" single-line hide-details dense clearable)
+            v-text-field(v-model="search" append-icon="mdi-magnify" single-line hide-details dense clearable)
           v-col.text-end(cols="6")
             v-btn(color="indigo" elevation="1" dark @click="$inertia.visit('/admin/user/create')")
               <v-icon left>mdi-account-plus</v-icon> 新增用戶
@@ -33,6 +33,7 @@
                 v-btn.mr-1(@click="unbanItem(item)" color="purple" icon small v-on="on")
                   v-icon mdi-account-check
               span 啟用用戶
+              .caption (停用日期 {{ item.banned_at }})
             v-tooltip(bottom color="teal")
               template(v-slot:activator="{ on }")
                 v-btn.mr-1(@click="resetItem(item)" color="teal" icon small v-on="on")
@@ -46,11 +47,11 @@
 </template>
 
 <script>
-import Layout from '@/Components/LayoutMain'
+import layout from '@/Components/LayoutMain'
 import conformOptions from '@/stub/confirm-options'
 
 export default {
-  layout: Layout,
+  layout,
   metaInfo: {
     title: 'User'
   },

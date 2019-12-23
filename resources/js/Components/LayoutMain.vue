@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-app
+  v-app(v-if="ok")
     v-navigation-drawer(v-model="drawer" app clipped width="200")
       v-list
         v-list-item-group(:value="path" color="orange" :mandatory="isActive")
@@ -43,14 +43,7 @@
         transition(name="slide-x-reverse-transition" mode="out-in")
           slot
 
-    v-snackbar(
-      v-model="show"
-      :timeout="timeout"
-      top color="success"
-      @input="clearSuccess"
-    ) {{ $page.flash.success }}
-      v-btn(icon @click="clearSuccess" dark)
-        v-icon mdi-close
+    flash-message
 </template>
 
 <script>
@@ -58,12 +51,11 @@ export default {
   data() {
     return {
       drawer: true,
-      timeout: 6000,
+      ok: false,
       items: [
         { icon: 'mdi-account-group', link: '/admin/users', text: '用戶管理', val: 'admin' },
         { icon: 'mdi-lock', link: '/protect', text: 'Protect', val: 'protect' }
-      ],
-      show: false
+      ]
     }
   },
   computed: {
@@ -74,14 +66,15 @@ export default {
       return this.items.map(v => v.val).includes(this.path)
     }
   },
-  watch: {
-    '$page.flash.success': {
-      handler(val) {
-        this.show = val !== null
-        this.timeout = 6000
-      },
-      immediate: true
-    },
+  beforeCreate() {
+    fetch('http://192.168.1.47:10000/auth/ping')
+      .then(r => {
+        if (r.url === 'http://192.168.1.47:10000/login') {
+          return window.location.reload()
+        }
+        this.ok = true
+      })
+      .catch(e => window.location.reload())
   },
   methods: {
     visit(link) {
@@ -94,11 +87,9 @@ export default {
       this.visit('/change-password')
     },
     logout() {
-      this.$inertia.post('/logout')
-    },
-    clearSuccess() {
-      this.show = false
-      this.$page.flash.success = null
+      this.$inertia.post('/logout', {
+        preserveState: false
+      })
     }
   }
 }

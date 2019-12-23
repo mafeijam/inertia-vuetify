@@ -12,6 +12,10 @@ class LogoutBannedUser
         $user = $request->user();
 
         if ($user && $user->banned_at) {
+            $user->loginActivities()->create([
+                'type' => 'banned'
+            ]);
+            $request->session()->flush();
             Auth::logout();
             return redirect('/banned');
         }
