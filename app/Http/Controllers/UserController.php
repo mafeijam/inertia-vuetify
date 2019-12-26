@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Mail;
+use Session;
 use App\Mail\ResetUserPassword;
 use App\User;
 use Illuminate\Http\Request;
@@ -121,6 +122,20 @@ class UserController extends Controller
     public function banned()
     {
         return Inertia::render('User/Banned');
+    }
+
+    public function showGoogle2FA()
+    {
+        if (Session::get('google2fa.auth_passed')) {
+            return redirect('/admin/users');
+        }
+
+        return Inertia::render('User/Google2FA');
+    }
+
+    public function verifyGoogle2FA()
+    {
+        return redirect('/admin/users');
     }
 
     protected function message()

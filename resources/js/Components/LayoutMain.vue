@@ -17,7 +17,7 @@ export default {
       drawer: true
     }
   },
-  beforeCreate() {
+  created() {
     fetch('http://192.168.1.47:10000/auth/ping')
       .then(r => r.text())
       .catch(e => window.location.reload())

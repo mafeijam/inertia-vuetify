@@ -63,6 +63,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'banned' => \App\Http\Middleware\LogoutBannedUser::class,
         'no-back' => \App\Http\Middleware\NoBack::class,
+        '2fa' => \App\Http\Middleware\Google2FA::class,
     ];
 
     /**
