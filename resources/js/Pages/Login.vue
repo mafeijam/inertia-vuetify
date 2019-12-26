@@ -10,11 +10,12 @@
               v-form
                 v-text-field(v-model="form.email" label="帳號"
                   prepend-inner-icon="mdi-email" filled
+                  @keydown.enter="login"
                   :error-messages="$page.errors.email"
                   autofocus)
                 v-text-field(v-model="form.password" label="密碼"
-                  prepend-inner-icon="mdi-lock"
-                  filled type="password"
+                  prepend-inner-icon="mdi-lock" filled type="password"
+                  @keydown.enter="login"
                   :error-messages="$page.errors.password")
                 v-checkbox.mt-0.mb-6(v-model="form.remember" label="記住我" hide-details color="indigo")
                 v-row(no-gutters)

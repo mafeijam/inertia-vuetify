@@ -24,7 +24,8 @@ class AppServiceProvider extends ServiceProvider
         Inertia::share([
             'auth' => function () {
                 return [
-                    'user' => Auth::user()
+                    'user' => Auth::user(),
+                    'last_login' => Session::get('last_login')
                 ];
             },
             'flash' => function () {

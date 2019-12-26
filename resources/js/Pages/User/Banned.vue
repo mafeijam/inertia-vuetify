@@ -12,5 +12,10 @@ export default {
   metaInfo: {
     title: 'Banned'
   },
+  created() {
+    if (!this.$page.flash.error) {
+      return window.location.replace('/')
+    }
+  }
 }
 </script>

@@ -8,7 +8,7 @@ Route::get('/', function () {
     return Inertia::render('Home');
 });
 
-Route::prefix('admin')->middleware(['auth', 'banned'])->group(function () {
+Route::prefix('admin')->middleware(['no-back', 'auth', 'banned'])->group(function () {
     Route::get('users', [UserController::class, 'index']);
     Route::get('user/create', [UserController::class, 'create']);
     Route::get('user/{user}/edit', [UserController::class, 'edit']);
@@ -19,7 +19,7 @@ Route::prefix('admin')->middleware(['auth', 'banned'])->group(function () {
     Route::patch('user/{user}/reset', [UserController::class, 'reset']);
 });
 
-Route::middleware(['auth', 'banned'])->group(function () {
+Route::middleware(['no-back', 'auth', 'banned'])->group(function () {
     Route::post('logout', [LoginController::class, 'logout']);
     Route::get('change-password', [UserController::class, 'showChangePassword']);
     Route::post('change-password', [UserController::class, 'changePassword']);
@@ -35,5 +35,5 @@ Route::get('protect', function () {
 })->middleware('auth');
 
 Route::get('auth/ping', function () {
-    return 'ping';
+    return 'pong';
 })->middleware('auth');
