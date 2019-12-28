@@ -1,6 +1,8 @@
 <?php
 
+use App\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 use PragmaRX\Google2FAQRCode\Google2FA;
 class UserSeeder extends Seeder
 {
@@ -11,13 +13,29 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $g2fa = new Google2FA;
+        // $g2fa = new Google2FA;
 
-        \App\User::create([
+        $email = 'super@system.com';
+
+        // $key = $g2fa->generateSecretKey();
+
+        // $qr = $g2fa->getQRCodeInline('super system', $email, $key);
+        // $qr = str_replace('data:image/png;base64,', '', $qr);
+
+        // Storage::put('super-qr.png', base64_decode($qr));
+
+        User::create([
             'name' => '超級管理員',
-            'email' => 'admin@system.com',
+            'email' => $email,
             'password' => bcrypt(123),
-            'google2fa_secret' => $g2fa->generateSecretKey(),
+            'google2fa_secret' => null,
+        ]);
+
+        User::create([
+            'name' => '普通用戶',
+            'email' => 'user@system.com',
+            'password' => bcrypt(123),
+            'google2fa_secret' => null,
         ]);
     }
 }

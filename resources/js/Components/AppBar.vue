@@ -18,11 +18,16 @@
               v-list-item-content
                 v-list-item-title.blue-grey--text.text--darken-1 {{ $page.auth.user.name }}
             v-divider.my-2
-            v-list-item(link @click="visit('/change-password')")
+            v-list-item(link @click="visit('/profile')")
               v-list-item-icon
-                v-icon(color="green") mdi-lock
+                v-icon(color="blue-grey") mdi-account-card-details
               v-list-item-content
-                v-list-item-title.green--text(style="line-height: initial;") 更改密碼
+                v-list-item-title.blue-grey--text(style="line-height: initial;") 個人檔案
+            v-list-item(link @click="visit('/auth/change-password')")
+              v-list-item-icon
+                v-icon(color="blue-grey") mdi-lock
+              v-list-item-content
+                v-list-item-title.blue-grey--text(style="line-height: initial;") 更改密碼
             v-list-item(link @click="logout")
               v-list-item-icon
                 v-icon(color="red") mdi-logout
@@ -37,7 +42,7 @@ export default {
   props: ['drawer'],
   methods: {
     logout() {
-      axios.post('/logout')
+      axios.post('/auth/logout')
         .then(r => {
           sessionStorage.setItem('logout', true)
           window.location.replace('/')

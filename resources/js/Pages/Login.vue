@@ -47,7 +47,7 @@ export default {
       if (this.form.remember === false) {
         delete this.form.remember
       }
-      this.$inertia.post('/login', this.form)
+      this.$inertia.post('/auth/login', this.form)
         .finally(() => this.loading = false)
     }
   }

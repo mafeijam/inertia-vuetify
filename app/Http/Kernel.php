@@ -41,6 +41,13 @@ class Kernel extends HttpKernel
             'throttle:60,1',
             'bindings',
         ],
+
+        'app' => [
+            'no-cache',
+            'auth',
+            'banned',
+            '2fa'
+        ],
     ];
 
     /**
@@ -62,7 +69,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'banned' => \App\Http\Middleware\LogoutBannedUser::class,
-        'no-back' => \App\Http\Middleware\NoBack::class,
+        'no-cache' => \App\Http\Middleware\NoCache::class,
         '2fa' => \App\Http\Middleware\Google2FA::class,
     ];
 

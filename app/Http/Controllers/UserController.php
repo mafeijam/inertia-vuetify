@@ -3,25 +3,36 @@
 namespace App\Http\Controllers;
 
 use Mail;
-use Session;
-use App\Mail\ResetUserPassword;
 use App\User;
+use App\LoginActivity;
+use App\Mail\ResetUserPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
     public function index()
     {
+        $lastQuery = LoginActivity::select('created_at')
+            ->whereColumn('user_id', 'users.id')
+            ->where('type', 'login')
+            ->orderBy('created_at', 'desc')
+            ->limit(1);
+
         return Inertia::render('User/Index', [
-            'users' => User::where('id', '!=', 1)->orderBy('name')->get()
+            'users' => User::with('roles')
+                ->addSelect(['last_login' => $lastQuery])
+                ->orderBy('id')->get()
         ]);
     }
 
     public function create()
     {
-        return Inertia::render('User/Create');
+        return Inertia::render('User/Create', [
+            'roles' => Role::all()->pluck('name')
+        ]);
     }
 
     public function store(Request $request)
@@ -34,43 +45,53 @@ class UserController extends Controller
 
         $valid['password'] = bcrypt($valid['password']);
 
-        User::create($valid);
+        User::create($valid)->syncRoles($request->roles);;
 
-        return redirect('/admin/users')->with('success', '已成功新增用戶');
+        return redirect('/admin/user')->with('success', '已成功新增用戶');
     }
 
     public function edit(User $user)
     {
         return Inertia::render('User/Edit', [
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email
-            ]
+            'user' => $user->append('last_login_edit'),
+            'roles' => Role::all()->pluck('name')
         ]);
     }
 
     public function update(Request $request, User $user)
     {
+        if ($user->id === 1) {
+            return abort(403);
+        }
+
         $valid = $request->validate([
             'name' => 'required',
             'email' => 'bail|required|email:rfc,dns|unique:users,email,'.$user->id
         ], $this->message());
 
         $user->update($valid);
+        $user->syncRoles($request->all_roles);
 
-        return redirect('/admin/users')->with('success', '已成功修改用戶: '.$user->name);
+        return redirect('/admin/user')->with('success', '已成功修改用戶: '.$user->name);
     }
 
     public function destroy(User $user)
     {
+        if ($user->id === 1) {
+            return abort(403);
+        }
+
         $user->delete();
 
-        return redirect('/admin/users')->with('success', '已成功刪除用戶: '.$user->name);
+        return redirect('/admin/user')->with('success', '已成功刪除用戶: '.$user->name);
     }
 
     public function banToggle(User $user, Request $request)
     {
+        if ($user->id === 1) {
+            return abort(403);
+        }
+
         $action = $request->has('unban');
         $user->banned_at = $action ? null : now();
         $user->save();
@@ -86,6 +107,10 @@ class UserController extends Controller
 
     public function reset(User $user, Request $request)
     {
+        if ($user->id === 1) {
+            return abort(403);
+        }
+
         $password = Str::random(10);
         $user->password = bcrypt($password);
         $user->save();
@@ -119,23 +144,14 @@ class UserController extends Controller
         return back()->with('success', '已成功更改密碼');
     }
 
+    public function profile()
+    {
+        return Inertia::render('User/Profile');
+    }
+
     public function banned()
     {
         return Inertia::render('User/Banned');
-    }
-
-    public function showGoogle2FA()
-    {
-        if (Session::get('google2fa.auth_passed')) {
-            return redirect('/admin/users');
-        }
-
-        return Inertia::render('User/Google2FA');
-    }
-
-    public function verifyGoogle2FA()
-    {
-        return redirect('/admin/users');
     }
 
     protected function message()

@@ -17,10 +17,6 @@ class Google2FA
             return $next($request);
         }
 
-        if ($request->has('verify') && !$success) {
-            return redirect('2fa')->with('error', true);
-        }
-
-        return redirect('2fa');
+        return redirect('auth/2fa')->with('error', $request->has('verify') && !$success);
     }
 }

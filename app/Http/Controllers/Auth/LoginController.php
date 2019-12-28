@@ -38,6 +38,6 @@ class LoginController extends Controller
             'data' => UserAgent::get()
         ]);
 
-        return redirect('/admin/users');
+        return redirect('/profile');
     }
 }

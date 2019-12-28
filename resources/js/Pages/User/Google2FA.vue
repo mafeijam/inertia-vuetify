@@ -41,7 +41,7 @@ export default {
   methods: {
     verify() {
       this.loading = true
-      this.$inertia.post('/2fa?verify=1', this.form)
+      this.$inertia.post('/auth/2fa?verify=1', this.form)
         .finally(() => this.loading = false)
     }
   }

@@ -1,5 +1,5 @@
 <template lang="pug">
-  pre {{ $page.auth }}
+
 </template>
 
 <script>
@@ -8,7 +8,7 @@ import layout from '@/Components/LayoutMain'
 export default {
   layout,
   metaInfo: {
-    title: 'Protect'
+    title: 'Project'
   },
 }
 </script>

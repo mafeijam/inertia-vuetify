@@ -25,6 +25,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('toggle-2fa', function ($user, $targetUser) {
+            return $user->id === $targetUser->id || $user->can('修改:用戶');
+        });
     }
 }

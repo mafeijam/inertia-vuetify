@@ -27,6 +27,9 @@ export default {
   methods: {
     hide() {
       this.$emit('update:show', false)
+      if (this.options.cancel !== undefined) {
+        this.options.cancel()
+      }
     },
     confirm() {
       this.loading = true

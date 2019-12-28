@@ -18,8 +18,15 @@
             prepend-inner-icon="mdi-lock" filled type="password"
             :error-messages="$page.errors.password"
             @keydown="$page.errors.password = []")
-          v-btn(block color="indigo" dark large elevation="1" @click="submit" :loading="loading")
-            <v-icon left>mdi-check</v-icon> 新增
+
+          v-row(no-gutters)
+            v-col(cols="12")
+              span(style="font-size: 16px;") 角色
+            v-col(cols="4" v-for="r in roles" :key="r")
+              v-checkbox.mt-1(v-model="form.roles" color="indigo" hide-details :label="r" :value="r")
+
+          v-btn.mt-6(block color="indigo" dark large elevation="1" @click="submit" :loading="loading")
+            <v-icon left>mdi-check</v-icon> 確認
 </template>
 
 <script>
@@ -30,13 +37,15 @@ export default {
   metaInfo: {
     title: 'User Create'
   },
+  props: ['roles'],
   data() {
     return {
       loading: false,
       form: {
         name: null,
         email: null,
-        password: null
+        password: null,
+        roles: []
       }
     }
   },
