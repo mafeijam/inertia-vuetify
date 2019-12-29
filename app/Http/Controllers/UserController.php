@@ -146,6 +146,27 @@ class UserController extends Controller
         return Inertia::render('User/Banned');
     }
 
+    public function batchBanToggle(Request $request)
+    {
+        $ids = explode(',', $request->ids);
+        abort_if(in_array(1, $ids), 403);
+
+        User::whereIn('id', $ids)
+            ->update(['banned_at' => $request->has('unban') ? null : now()]);
+
+        return back()->with('success', $request->has('unban') ? '已成功啟用用戶' : '已成功停用用戶');
+    }
+
+    public function batchDelete(Request $request)
+    {
+        $ids = explode(',', $request->ids);
+        abort_if(in_array(1, $ids), 403);
+
+        User::whereIn('id', $ids)->delete();
+
+        return back()->with('success', '已成功刪除用戶');
+    }
+
     protected function message()
     {
         return [

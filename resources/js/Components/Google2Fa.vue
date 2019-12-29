@@ -2,7 +2,7 @@
   v-card.elevation-1.mx-auto(width="600")
     v-toolbar(dark flat color="orange")
       v-toolbar-title 雙重認證
-    v-card-text.pa-6
+    v-card-text.pa-3.pa-lg-6
       v-row(align="center" justify="space-between" no-gutters)
         span(style="font-size: 16px;") 啟用/停用
         v-switch(v-model="g2fa" inset hide-details color="indigo"
@@ -19,6 +19,10 @@
         v-card-title(v-else) 掃瞄註冊
         v-card-text
           img(:src="user.qr_code")
+        v-card-text
+          .blue-grey--text.text--darken-2 或輸入
+          .indigo--text.text--darken-2.font-weight-black {{ user.google2fa_secret }}
+        v-card-text
           v-btn(v-if="persistent" @click="registered" elevation="1" dark color="pink")
             <v-icon left>mdi-check</v-icon> 確認
 </template>

@@ -1,12 +1,12 @@
 <template lang="pug">
   v-app(v-if="auth")
     flash-message
-    navigation(:show="drawer")
-    app-bar(:drawer.sync="drawer")
+    navigation
+    app-bar
     v-content
-      v-container.pa-5(fluid scroll-region)
-        transition(name="slide-x-reverse-transition" mode="out-in")
-          slot
+      v-container.pa-3(fluid scroll-region)
+        //- transition(name="fade-transition" mode="out-in")
+        slot
 </template>
 
 <script>
@@ -14,7 +14,6 @@ export default {
   data() {
     return {
       auth: false,
-      drawer: true
     }
   },
   created() {

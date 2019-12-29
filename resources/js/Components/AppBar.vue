@@ -1,6 +1,6 @@
 <template lang="pug">
     v-app-bar(app dark color="blue-grey darken-3" elevation="1" clipped-left)
-      v-app-bar-nav-icon(@click.stop="$emit('update:drawer', !drawer)" color="blue-grey lighten-5")
+      v-app-bar-nav-icon(@click="updateMenu" color="blue-grey lighten-5")
       v-toolbar-title.blue-grey--text.text--lighten-5.pointer(@click="visit('/')") 超級系統
       v-spacer
       template(v-if="$page.auth.user")
@@ -39,7 +39,6 @@
 import axios from 'axios'
 
 export default {
-  props: ['drawer'],
   methods: {
     logout() {
       axios.post('/auth/logout')
@@ -47,6 +46,9 @@ export default {
           sessionStorage.setItem('logout', true)
           window.location.replace('/')
         })
+    },
+    updateMenu() {
+      this.$root.$emit('updateMenu')
     }
   }
 }

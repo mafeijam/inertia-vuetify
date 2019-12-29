@@ -2,35 +2,36 @@
   v-row(align="center" justify="center")
     confirm-dialog(:show.sync="confirm" :options="conformOptions")
 
-    v-card.elevation-1(width="600")
-      v-toolbar(dark flat color="orange")
-        v-toolbar-title 修改角色
-      v-card-text.pa-6
-        v-form
-          v-text-field(label="名稱" v-model="form.name" color="orange"
-            prepend-inner-icon="mdi-key" filled
-            :error-messages="$page.errors.name"
-            @keydown="$page.errors.name = []"
-            autofocus)
+    v-col.pt-0(cols="auto")
+      v-card.elevation-1(width="600")
+        v-toolbar(dark flat color="orange")
+          v-toolbar-title 修改角色
+        v-card-text.pa-3.pa-lg-6
+          v-form
+            v-text-field(label="名稱" v-model="form.name" color="orange"
+              prepend-inner-icon="mdi-key" filled
+              :error-messages="$page.errors.name"
+              @keydown="$page.errors.name = []"
+              autofocus)
 
-          v-row(justify="start" no-gutters)
-            v-col.mb-1(cols="12")
-              span(style="font-size: 16px;") 用戶
-            v-col(cols="12")
-              v-chip.mr-2(v-for="r in role.users" :key="r.id"
-                color="indigo" dark small outlined label) {{ r.name }}
+            v-row(justify="start" no-gutters)
+              v-col.mb-1(cols="12")
+                span(style="font-size: 16px;") 用戶
+              v-col(cols="12")
+                v-chip.mr-2(v-for="r in role.users" :key="r.id"
+                  color="indigo" dark small outlined label) {{ r.name }}
 
-          v-row.my-6(no-gutters)
-            v-col.mr-3(v-if="$can('刪除:用戶')")
-              v-btn(block color="pink" dark large elevation="1" @click="deleteItem")
-                <v-icon left size="20">mdi-close</v-icon> 刪除
-            v-col
-              v-btn(block color="indigo" dark large elevation="1" @click="submit" :loading="loading")
-                <v-icon left>mdi-check</v-icon> 確認
-          v-row(no-gutters)
-            v-col.mb-1(cols="12")
-              span(style="font-size: 16px;") 權限
-          v-treeview(v-model="selection" :items="permissions" dense open-on-click selectable transition item-key="name")
+            v-row.mt-6(dense)
+              v-col(v-if="$can('刪除:用戶')" cols="12" lg="4")
+                v-btn(block color="pink" dark large elevation="1" @click="deleteItem")
+                  <v-icon left size="20">mdi-close</v-icon> 刪除
+              v-col(cols="12" lg="4")
+                v-btn(block color="indigo" dark large elevation="1" @click="submit" :loading="loading")
+                  <v-icon left>mdi-check</v-icon> 確認
+            v-row.mt-6(no-gutters)
+              v-col.mb-1(cols="12")
+                span(style="font-size: 16px;") 權限
+            v-treeview(v-model="selection" :items="permissions" dense open-on-click selectable transition item-key="name")
 </template>
 
 <script>

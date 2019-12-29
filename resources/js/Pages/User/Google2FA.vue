@@ -1,20 +1,17 @@
 <template lang="pug">
-  v-app
-    v-content
-      v-container.fill-height(fluid)
-        v-row(align="center" justify="center")
-          v-card.elevation-1(width="400")
-            v-toolbar(dark flat color="blue-grey darken-3")
-              v-toolbar-title 輸入一次性密碼
-            v-card-text.pa-6
-              v-form(@submit.prevent)
-                v-text-field(v-model="form.one_time_password" label="OTP"
-                  prepend-inner-icon="mdi-lock" filled
-                  @keydown="$page.flash.error = null"
-                  @keydown.enter="verify"
-                  :error-messages="error"
-                  autofocus)
-                v-btn(block color="indigo" dark large elevation="1" @click="verify" :loading="loading") 確認
+  app-center
+    v-card.elevation-1.mx-auto(width="400")
+      v-toolbar(dark flat color="blue-grey darken-3")
+        v-toolbar-title 輸入一次性密碼
+      v-card-text.pa-3.pa-lg-6
+        v-form(@submit.prevent)
+          v-text-field(v-model="form.one_time_password" label="OTP"
+            prepend-inner-icon="mdi-lock" filled
+            @keydown="$page.flash.error = null"
+            @keydown.enter="verify"
+            :error-messages="error"
+            autofocus)
+          v-btn(block color="indigo" dark large elevation="1" @click="verify" :loading="loading") 確認
 </template>
 
 <script>

@@ -4,7 +4,7 @@
       v-card.elevation-1.mx-auto(width="600")
         v-toolbar(dark flat color="orange")
           v-toolbar-title 更改密碼
-        v-card-text.pa-6
+        v-card-text.pa-3.pa-lg-6
           v-text-field(label="密碼" v-model="form.password" color="orange"
             prepend-inner-icon="mdi-lock" filled type="password"
             :error-messages="$page.errors.password"

@@ -4,18 +4,41 @@
 
     v-col(cols="12")
       v-card
-        v-row.pa-5(no-gutters)
-          v-col(cols="6")
+        v-row.pa-3(dense)
+          v-col(cols="12" lg="6")
             v-text-field(v-model="search" append-icon="mdi-magnify" single-line hide-details dense clearable)
-          v-col.text-end(cols="6")
-            v-btn(color="indigo" elevation="1" dark @click="$inertia.visit('/admin/user/create')" v-if="$can('新增:用戶')")
+          v-col.text-end(cols="12" lg="6")
+            v-menu(offset-y nudge-bottom="5" transition="slide-y-transition" close-on-click left)
+              template(v-slot:activator="{ on }")
+                v-btn.mr-3(color="pink" elevation="1" dark v-on="on" v-if="$can('修改:用戶|刪除:用戶')")
+                  <v-icon left>mdi-check-box-multiple-outline</v-icon> 批次處理
+              v-list(dense)
+                v-list-item(@click="batch('啟用')" v-if="$can('修改:用戶')")
+                  v-list-item-icon
+                    v-icon(color="purple") mdi-account-check
+                  v-list-item-content
+                    v-list-item-title.purple--text(style="line-height: initial;") 啟用
+                v-list-item(@click="batch('停用')" v-if="$can('修改:用戶')")
+                  v-list-item-icon
+                    v-icon(color="orange") mdi-cancel
+                  v-list-item-content
+                    v-list-item-title.orange--text(style="line-height: initial;") 停用
+                v-list-item(@click="batch('刪除')" v-if="$can('修改:刪除')")
+                  v-list-item-icon
+                    v-icon(color="pink") mdi-account-remove
+                  v-list-item-content
+                    v-list-item-title.pink--text(style="line-height: initial;") 刪除
+
+            v-btn(color="indigo" elevation="1" dark @click="visit('/admin/user/create')" v-if="$can('新增:用戶')")
               <v-icon left>mdi-account-plus</v-icon> 新增用戶
         v-data-table(
+          v-model="selected"
           :headers="headers"
           :items="users"
           :items-per-page="15"
           multi-sort
           :search="search"
+          show-select
         )
           template(v-slot:item.is_2fa_enabled="{ item }")
             v-chip(:color="item.is_2fa_enabled ? 'green' : 'red'" dark small outlined label) {{ item.is_2fa_enabled ? '啟用' : '停用' }}
@@ -31,7 +54,7 @@
                 v-btn.mr-1(@click="editItem(item)" color="green" icon small v-on="on" v-if="$can('修改:用戶')")
                   v-icon mdi-account-edit
               span 修改用戶
-            v-tooltip(bottom color="orange" v-if="item.banned_at == null")
+            v-tooltip(bottom color="orange" v-if="item.banned_at === null")
               template(v-slot:activator="{ on }")
                 v-btn.mr-1(@click="banItem(item)" color="orange" icon small v-on="on" v-if="$can('修改:用戶')")
                   v-icon mdi-cancel
@@ -44,7 +67,7 @@
               .caption (停用日期 {{ item.banned_at }})
             v-tooltip(bottom color="teal")
               template(v-slot:activator="{ on }")
-                v-btn.mr-1(@click="resetItem(item)" color="teal" icon small v-on="on" :disabled="item.banned_at" v-if="$can('修改:用戶')")
+                v-btn.mr-1(@click="resetItem(item)" color="teal" icon small v-on="on" :disabled="item.banned_at !== null" v-if="$can('修改:用戶')")
                   v-icon mdi-lock-reset
               span 重設用戶密碼
             v-tooltip(bottom color="pink")
@@ -67,6 +90,7 @@ export default {
   data() {
     return {
       confirm: false,
+      selected: [],
       headers: [
         { text: '名稱', value: 'name' },
         { text: '電郵', value: 'email' },
@@ -75,7 +99,7 @@ export default {
         { text: '最後登入', value: 'last_login', filterable: false },
         { text: '新增日期', value: 'created_at', filterable: false },
         { text: '最後更新', value: 'updated_at', filterable: false },
-        { text: '操作', value: 'action', sortable: false, align: 'right' },
+        { text: '操作', value: 'action', sortable: false, align: 'end' },
       ],
       items: [],
       search: '',
@@ -120,6 +144,25 @@ export default {
         message: item.name,
         method: 'patch',
         endpoint: `/admin/user/${item.id}/ban?name=1&unban=1`
+      }
+    },
+    batch(action) {
+      this.confirm = true
+      let ids = this.selected.map(v => v.id).join(',')
+      let map = {
+        '啟用': ['patch', `/admin/user/batch/ban?unban=1&ids=${ids}`],
+        '停用': ['patch', `/admin/user/batch/ban?ids=${ids}`],
+        '刪除': ['delete', `/admin/user/batch/delete?ids=${ids}`]
+      }
+      let self = this
+      this.conformOptions = {
+        title: `確認批次${action}`,
+        message: this.selected.map(v => v.name).join(', '),
+        method: map[action][0],
+        endpoint: map[action][1],
+        done() {
+          self.selected = []
+        }
       }
     }
   }

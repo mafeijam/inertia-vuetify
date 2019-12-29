@@ -43,6 +43,9 @@ export default {
         .finally(() => {
           this.loading = false
           this.hide()
+          if (this.options.done !== undefined) {
+            this.options.done()
+          }
         })
     },
     cancel() {

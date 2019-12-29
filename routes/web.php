@@ -13,11 +13,16 @@ Route::prefix('admin')->middleware('app')->group(function () {
     Route::get('user', [UserController::class, 'index'])->middleware('can:查看:用戶管理');
     Route::get('user/create', [UserController::class, 'create'])->middleware('can:新增:用戶');
     Route::post('user', [UserController::class, 'store'])->middleware('can:新增:用戶');
+    Route::patch('user/batch/ban', [UserController::class, 'batchBanToggle'])->middleware('can:修改:用戶');
+    Route::delete('user/batch/delete', [UserController::class, 'batchDelete'])->middleware('can:刪除:用戶');
+
     Route::get('user/{user}/edit', [UserController::class, 'edit'])->middleware('can:修改:用戶');
     Route::put('user/{user}', [UserController::class, 'update'])->middleware('can:修改:用戶');
     Route::delete('user/{user}', [UserController::class, 'destroy'])->middleware('can:刪除:用戶');
     Route::patch('user/{user}/ban', [UserController::class, 'banToggle'])->middleware('can:修改:用戶');
     Route::patch('user/{user}/reset', [UserController::class, 'reset'])->middleware('can:修改:用戶');
+
+
 
     Route::get('permission', [PermissionController::class, 'index'])->middleware('can:查看:權限管理');
     Route::get('permission/create', [PermissionController::class, 'create'])->middleware('can:新增:角色');

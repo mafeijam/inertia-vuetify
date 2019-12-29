@@ -1,19 +1,22 @@
 <template lang="pug">
   v-row(align="center" justify="center")
-    v-card.elevation-1(width="600")
-      v-toolbar(dark flat color="orange")
-        v-toolbar-title 新增角色
-      v-card-text.pa-6
-        v-form
-          v-text-field(label="名稱" v-model="form.name" color="orange"
-            prepend-inner-icon="mdi-key" filled
-            :error-messages="$page.errors.name"
-            @keydown="$page.errors.name = []"
-            autofocus)
-          v-btn(block color="indigo" dark large elevation="1" @click="submit" :loading="loading")
-            <v-icon left>mdi-check</v-icon> 確認
-      v-card-text.pa-6
-        V-treeview(v-model="selection" :items="permissions" dense open-on-click selectable transition item-key="name")
+    v-col.pt-0(cols="auto")
+      v-card.elevation-1(width="600")
+        v-toolbar(dark flat color="orange")
+          v-toolbar-title 新增角色
+        v-card-text.pa-3.pa-lg-6
+          v-form
+            v-text-field(label="名稱" v-model="form.name" color="orange"
+              prepend-inner-icon="mdi-key" filled
+              :error-messages="$page.errors.name"
+              @keydown="$page.errors.name = []"
+              autofocus)
+            v-btn(block color="indigo" dark large elevation="1" @click="submit" :loading="loading")
+              <v-icon left>mdi-check</v-icon> 確認
+            v-row.mt-6(no-gutters)
+              v-col.mb-1(cols="12")
+                span(style="font-size: 16px;") 權限
+              v-treeview(v-model="selection" :items="permissions" dense open-on-click selectable transition item-key="name")
 </template>
 
 <script>

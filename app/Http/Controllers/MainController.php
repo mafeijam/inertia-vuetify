@@ -20,7 +20,7 @@ class MainController extends Controller
 
     public function error(Request $request)
     {
-        $status = Session::get('status');
+        $status = Session::get('status', 500);
         return Inertia::render('Error', ['status' => $status])
             ->toResponse($request)
             ->setStatusCode($status);

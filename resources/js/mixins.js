@@ -1,6 +1,9 @@
 export default {
   methods: {
     visit(link) {
+      if (window.innerWidth <= 1260) {
+        this.$root.$emit('updateMenu', true)
+      }
       this.$inertia.visit(link, {
         preserveState: true,
         preserveScroll: true,

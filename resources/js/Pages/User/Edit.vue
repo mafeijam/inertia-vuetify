@@ -2,11 +2,11 @@
   v-row(align="center" justify="center")
     confirm-dialog(:show.sync="confirm" :options="conformOptions")
 
-    v-col.pt-0(cols="12")
+    v-col.pt-0(cols="auto")
       v-card.elevation-1.mx-auto(width="600")
         v-toolbar(dark flat color="orange")
           v-toolbar-title 修改用戶
-        v-card-text.pa-6
+        v-card-text.pa-3.pa-lg-6
           v-row.mb-6(align="center" justify="space-between" no-gutters style="font-size: 10px;")
             span 最後登入
             span(v-if="user.last_login_edit") {{ user.last_login_edit }}
@@ -29,17 +29,17 @@
             v-row.mt-6(no-gutters)
               v-col(cols="12")
                 span(style="font-size: 16px;") 角色
-              v-col(cols="4" v-for="r in roles" :key="r")
+              v-col(cols="12" lg="4" v-for="r in roles" :key="r")
                 v-checkbox.mt-1(v-model="form.all_roles" color="indigo" hide-details :label="r" :value="r")
 
-            v-row.mt-6(no-gutters)
-              v-col.mr-3(v-if="$can('刪除:用戶')")
+            v-row.mt-6(dense)
+              v-col(v-if="$can('刪除:用戶')" cols="12" lg="4")
                 v-btn(block color="pink" dark large elevation="1" @click="deleteItem")
                   <v-icon left size="20">mdi-close</v-icon> 刪除
-              v-col.mr-3
+              v-col(cols="12" lg="4")
                 v-btn(block color="teal" :dark="active" large elevation="1" @click="resetItem" :disabled="!active")
                   <v-icon left size="20">mdi-lock-reset</v-icon> 重設密碼
-              v-col
+              v-col(cols="12" lg="4")
                 v-btn(block color="indigo" dark large elevation="1" @click="submit" :loading="loading")
                   <v-icon left size="20">mdi-check</v-icon> 確認
     v-col.mt-1(cols="12" v-if="active")

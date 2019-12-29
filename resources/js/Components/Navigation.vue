@@ -11,15 +11,23 @@
 
 <script>
 export default {
-  props: ['show'],
   data() {
     return {
+      show: window.innerWidth >= 1260,
       items: [
         { icon: 'mdi-account-group', link: '/admin/user', text: '用戶管理', val: 'user', permission: '查看:用戶管理' },
         { icon: 'mdi-key', link: '/admin/permission', text: '權限管理', val: 'permission', permission: '查看:權限管理' },
         { icon: 'mdi-folder-open', link: '/module/project', text: '項目管理', val: 'project', permission: '查看:項目管理' },
       ]
     }
+  },
+  created() {
+    this.$root.$on('updateMenu', hide => {
+      if (hide) {
+        return this.show = false
+      }
+      this.show = !this.show
+    })
   },
   computed: {
     path() {

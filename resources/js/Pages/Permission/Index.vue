@@ -6,7 +6,7 @@
           v-col(cols="6")
             v-text-field(v-model="search" append-icon="mdi-magnify" single-line hide-details dense clearable)
           v-col.text-end(cols="6")
-            v-btn(color="indigo" elevation="1" dark @click="$inertia.visit('/admin/permission/create')" v-if="$can('新增:角色')")
+            v-btn(color="indigo" elevation="1" dark @click="visit('/admin/permission/create')" v-if="$can('新增:角色')")
               <v-icon left>mdi-key-plus</v-icon> 新增色角
         v-data-table(
           :headers="headers"
@@ -51,7 +51,7 @@ export default {
   },
   created() {
     if (this.$can('修改:角色|刪除:角色')) {
-      this.headers.push({ text: '操作', value: 'action', sortable: false, align: 'right' })
+      this.headers.push({ text: '操作', value: 'action', sortable: false, align: 'end' })
     }
   },
   methods: {
