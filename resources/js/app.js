@@ -18,18 +18,18 @@ window.Pusher = require('pusher-js')
 
 const app = document.getElementById('app')
 
+let page = JSON.parse(app.dataset.page)
+
 new Vue({
   vuetify: new Vuetify,
   metaInfo: {
     title: 'Loading…',
-    titleTemplate: '%s | Super System',
+    titleTemplate: page.props.local ? '[local] %s | Super System' : '%s | Super System',
   },
   render: h => h(InertiaApp, {
     props: {
-      initialPage: JSON.parse(app.dataset.page),
+      initialPage: page,
       resolveComponent: name => import(`./Pages/${name}`).then(module => module.default)
     },
   }),
 }).$mount(app)
-
-

@@ -42,6 +42,9 @@ class AppServiceProvider extends ServiceProvider
             'url' => Request::path(),
             'csrf' => function () {
                 return csrf_token();
+            },
+            'local' => function () {
+                return app()->environment('local');
             }
         ]);
     }

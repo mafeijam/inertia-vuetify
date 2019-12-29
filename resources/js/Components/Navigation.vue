@@ -8,13 +8,14 @@
           v-list-item-content
             v-list-item-title {{ item.text }}
     template(v-slot:append)
-      .text-right.pa-3
+      v-row.pa-3(align="center" justify="space-between" no-gutters)
         v-icon(:color="connected ? 'green' : 'red'") {{ connected ? 'mdi-check-network' : 'mdi-close-network' }}
+        v-chip(color="blue-grey" dark small outlined label) {{ online.length }} 人在線
 </template>
 
 <script>
 export default {
-  props: ['connected'],
+  props: ['connected', 'online'],
   data() {
     return {
       show: window.innerWidth >= 1260,

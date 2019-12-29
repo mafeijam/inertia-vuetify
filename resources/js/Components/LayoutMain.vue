@@ -1,7 +1,7 @@
 <template lang="pug">
   v-app(v-if="auth")
     flash-message
-    navigation(:connected="connected")
+    navigation(:connected="connected" :online="online")
     app-bar
     v-content
       v-container.pa-3(fluid scroll-region)
@@ -16,7 +16,8 @@ export default {
   data() {
     return {
       auth: false,
-      connected: false
+      connected: false,
+      online: []
     }
   },
   created() {
@@ -57,6 +58,14 @@ export default {
           let fn = 'notification' + notification.type.split('\\').pop()
           this[fn](notification)
         })
+
+        window.Echo.join('online')
+          .here(users => this.online = users)
+          .joining(user => this.online.push(user))
+          .leaving(user => {
+            let i = this.online.indexOf(user)
+            this.online.splice(i, 1)
+          })
     },
     notificationPermissionChanged(n) {
       this.$page.auth.user.all_permissions = n.all_permissions
