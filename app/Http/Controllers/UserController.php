@@ -101,7 +101,7 @@ class UserController extends Controller
 
     public function reset(User $user, Request $request)
     {
-        abort_if($user->id === 1, 403);
+        abort_if($user->id === 1 || $user->banned_at !== null, 403);
 
         $password = Str::random(10);
         $user->password = bcrypt($password);

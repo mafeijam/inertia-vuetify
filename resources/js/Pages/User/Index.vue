@@ -44,7 +44,7 @@
               .caption (停用日期 {{ item.banned_at }})
             v-tooltip(bottom color="teal")
               template(v-slot:activator="{ on }")
-                v-btn.mr-1(@click="resetItem(item)" color="teal" icon small v-on="on" v-if="$can('修改:用戶')")
+                v-btn.mr-1(@click="resetItem(item)" color="teal" icon small v-on="on" :disabled="item.banned_at" v-if="$can('修改:用戶')")
                   v-icon mdi-lock-reset
               span 重設用戶密碼
             v-tooltip(bottom color="pink")
