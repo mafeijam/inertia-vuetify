@@ -41,9 +41,7 @@ class PermissionController extends Controller
 
     public function update(Request $request, Role $role)
     {
-        if ($role->id === 1) {
-            return abort(403);
-        }
+        abort_if($role->id === 1, 403);
 
         $valid = $request->validate([
             'name' => 'required|unique:roles,name,'.$role->id,
@@ -53,6 +51,16 @@ class PermissionController extends Controller
         $role->syncPermissions($request->selection);
 
         return redirect('/admin/permission')->with('success', '已成功修改色角');
+    }
+
+    public function destroy(Role $role)
+    {
+
+        abort_if($role->id === 1, 403);
+
+        $role->delete();
+
+        return redirect('/admin/permission')->with('success', '已成功刪除色角');
     }
 
     protected function message()

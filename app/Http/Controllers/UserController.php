@@ -45,7 +45,7 @@ class UserController extends Controller
 
         $valid['password'] = bcrypt($valid['password']);
 
-        User::create($valid)->syncRoles($request->roles);;
+        User::create($valid)->syncRoles($request->roles);
 
         return redirect('/admin/user')->with('success', '已成功新增用戶');
     }
@@ -60,9 +60,7 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        if ($user->id === 1) {
-            return abort(403);
-        }
+        abort_if($user->id === 1, 403);
 
         $valid = $request->validate([
             'name' => 'required',
@@ -77,9 +75,7 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        if ($user->id === 1) {
-            return abort(403);
-        }
+        abort_if($user->id === 1, 403);
 
         $user->delete();
 
@@ -88,9 +84,7 @@ class UserController extends Controller
 
     public function banToggle(User $user, Request $request)
     {
-        if ($user->id === 1) {
-            return abort(403);
-        }
+        abort_if($user->id === 1, 403);
 
         $action = $request->has('unban');
         $user->banned_at = $action ? null : now();
@@ -107,9 +101,7 @@ class UserController extends Controller
 
     public function reset(User $user, Request $request)
     {
-        if ($user->id === 1) {
-            return abort(403);
-        }
+        abort_if($user->id === 1, 403);
 
         $password = Str::random(10);
         $user->password = bcrypt($password);

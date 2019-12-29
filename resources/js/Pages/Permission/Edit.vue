@@ -30,7 +30,7 @@
           v-row(no-gutters)
             v-col.mb-1(cols="12")
               span(style="font-size: 16px;") 權限
-            V-treeview(v-model="selection" :items="permissions" dense open-on-click selectable transition item-key="name")
+          v-treeview(v-model="selection" :items="permissions" dense open-on-click selectable transition item-key="name")
 </template>
 
 <script>
