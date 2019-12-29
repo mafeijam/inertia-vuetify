@@ -6,6 +6,7 @@ use Mail;
 use App\User;
 use App\LoginActivity;
 use App\Mail\ResetUserPassword;
+use App\Notifications\PermissionChanged;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -69,6 +70,8 @@ class UserController extends Controller
 
         $user->update($valid);
         $user->syncRoles($request->all_roles);
+
+        $user->notify(new PermissionChanged);
 
         return redirect('/admin/user')->with('success', '已成功修改用戶: '.$user->name);
     }

@@ -14,6 +14,8 @@ Vue.use(VueMeta)
 
 Vue.mixin(Mixins)
 
+window.Pusher = require('pusher-js')
+
 const app = document.getElementById('app')
 
 new Vue({
@@ -29,3 +31,5 @@ new Vue({
     },
   }),
 }).$mount(app)
+
+

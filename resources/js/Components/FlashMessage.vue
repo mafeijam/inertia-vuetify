@@ -18,11 +18,11 @@ export default {
     }
   },
   created() {
-    if (sessionStorage.getItem('logout')) {
+    if (sessionStorage.getItem('message')) {
       sessionStorage.removeItem('flash.shown')
-      sessionStorage.removeItem('logout')
       this.show = true
-      this.$page.flash.success = '已成功登出'
+      this.$page.flash.success = sessionStorage.getItem('message')
+      sessionStorage.removeItem('message')
     }
   },
   watch: {

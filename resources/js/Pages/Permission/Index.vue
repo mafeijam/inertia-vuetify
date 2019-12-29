@@ -1,11 +1,13 @@
 <template lang="pug">
   v-row(dense)
+    confirm-dialog(:show.sync="confirm" :options="conformOptions")
+
     v-col(cols="12")
       v-card
-        v-row.pa-5(no-gutters)
-          v-col(cols="6")
+        v-row.pa-3(dense)
+          v-col(cols="12" lg="6")
             v-text-field(v-model="search" append-icon="mdi-magnify" single-line hide-details dense clearable)
-          v-col.text-end(cols="6")
+          v-col.text-end(cols="12" lg="6")
             v-btn(color="indigo" elevation="1" dark @click="visit('/admin/permission/create')" v-if="$can('新增:角色')")
               <v-icon left>mdi-key-plus</v-icon> 新增色角
         v-data-table(
@@ -23,13 +25,14 @@
               span 修改色角
             v-tooltip(bottom color="pink")
               template(v-slot:activator="{ on }")
-                v-btn.mr-1(@click="editItem(item)" color="pink" icon small v-on="on" v-if="$can('刪除:角色')")
+                v-btn.mr-1(@click="deleteItem(item)" color="pink" icon small v-on="on" v-if="$can('刪除:角色')")
                   v-icon mdi-delete-circle-outline
               span 刪除色角
 </template>
 
 <script>
 import layout from '@/Components/LayoutMain'
+import conformOptions from '@/stub/confirm-options'
 
 export default {
   layout,
@@ -47,6 +50,7 @@ export default {
       ],
       items: [],
       search: '',
+      conformOptions: { ...conformOptions }
     }
   },
   created() {
@@ -57,7 +61,16 @@ export default {
   methods: {
     editItem(item) {
       this.$inertia.visit(`/admin/permission/role/${item.id}/edit`)
-    }
+    },
+    deleteItem(item) {
+      this.confirm = true
+      this.conformOptions = {
+        title: '確認刪除',
+        message: item.name,
+        method: 'delete',
+        endpoint: `/admin/permission/role/${item.id}`
+      }
+    },
   }
 }
 </script>

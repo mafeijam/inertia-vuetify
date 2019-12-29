@@ -10,7 +10,8 @@
           v-col.text-end(cols="12" lg="6")
             v-menu(offset-y nudge-bottom="5" transition="slide-y-transition" close-on-click left)
               template(v-slot:activator="{ on }")
-                v-btn.mr-3(color="pink" elevation="1" dark v-on="on" v-if="$can('修改:用戶|刪除:用戶')")
+                v-btn.mr-3(color="pink" elevation="1" :dark="selected.length > 0" v-on="on"
+                    :disabled="selected.length === 0" v-if="$can('修改:用戶|刪除:用戶')")
                   <v-icon left>mdi-check-box-multiple-outline</v-icon> 批次處理
               v-list(dense)
                 v-list-item(@click="batch('啟用')" v-if="$can('修改:用戶')")

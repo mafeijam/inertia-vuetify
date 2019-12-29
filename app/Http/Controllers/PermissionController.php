@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use App\Notifications\PermissionChanged;
 
 class PermissionController extends Controller
 {
@@ -49,13 +50,13 @@ class PermissionController extends Controller
 
         $role->update($valid);
         $role->syncPermissions($request->selection);
+        $role->users->map->notify(new PermissionChanged);
 
         return redirect('/admin/permission')->with('success', '已成功修改色角');
     }
 
     public function destroy(Role $role)
     {
-
         abort_if($role->id === 1, 403);
 
         $role->delete();

@@ -7,10 +7,14 @@
             v-icon {{ item.icon }}
           v-list-item-content
             v-list-item-title {{ item.text }}
+    template(v-slot:append)
+      .text-right.pa-3
+        v-icon(:color="connected ? 'green' : 'red'") {{ connected ? 'mdi-check-network' : 'mdi-close-network' }}
 </template>
 
 <script>
 export default {
+  props: ['connected'],
   data() {
     return {
       show: window.innerWidth >= 1260,

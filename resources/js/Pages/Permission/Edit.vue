@@ -22,10 +22,10 @@
                   color="indigo" dark small outlined label) {{ r.name }}
 
             v-row.mt-6(dense)
-              v-col(v-if="$can('刪除:用戶')" cols="12" lg="4")
+              v-col(v-if="$can('刪除:用戶')" cols="12" lg="6")
                 v-btn(block color="pink" dark large elevation="1" @click="deleteItem")
                   <v-icon left size="20">mdi-close</v-icon> 刪除
-              v-col(cols="12" lg="4")
+              v-col(cols="12" lg="6")
                 v-btn(block color="indigo" dark large elevation="1" @click="submit" :loading="loading")
                   <v-icon left>mdi-check</v-icon> 確認
             v-row.mt-6(no-gutters)

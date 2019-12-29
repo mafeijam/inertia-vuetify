@@ -43,7 +43,7 @@ export default {
     logout() {
       axios.post('/auth/logout')
         .then(r => {
-          sessionStorage.setItem('logout', true)
+          sessionStorage.setItem('message', '已成功登出')
           window.location.replace('/')
         })
     },

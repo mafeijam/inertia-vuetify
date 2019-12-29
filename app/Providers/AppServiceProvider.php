@@ -39,7 +39,10 @@ class AppServiceProvider extends ServiceProvider
                     ? Session::get('errors')->getBag('default')->getMessages()
                     : (object) [];
             },
-            'url' => Request::path()
+            'url' => Request::path(),
+            'csrf' => function () {
+                return csrf_token();
+            }
         ]);
     }
 

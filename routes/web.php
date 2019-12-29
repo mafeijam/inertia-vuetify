@@ -22,14 +22,12 @@ Route::prefix('admin')->middleware('app')->group(function () {
     Route::patch('user/{user}/ban', [UserController::class, 'banToggle'])->middleware('can:修改:用戶');
     Route::patch('user/{user}/reset', [UserController::class, 'reset'])->middleware('can:修改:用戶');
 
-
-
     Route::get('permission', [PermissionController::class, 'index'])->middleware('can:查看:權限管理');
     Route::get('permission/create', [PermissionController::class, 'create'])->middleware('can:新增:角色');
     Route::post('permission/role', [PermissionController::class, 'store'])->middleware('can:新增:角色');
     Route::get('permission/role/{role}/edit', [PermissionController::class, 'edit'])->middleware('can:修改:角色');
     Route::put('permission/role/{role}', [PermissionController::class, 'update'])->middleware('can:修改:角色');
-    Route::delete('permission/role/{role}', [PermissionController::class, 'destroy'])->middleware('can:刪除角色');
+    Route::delete('permission/role/{role}', [PermissionController::class, 'destroy'])->middleware('can:刪除:角色');
 });
 
 Route::prefix('auth')->middleware('app')->group(function () {
